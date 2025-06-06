@@ -29,8 +29,14 @@ jobs:
         python -m pip install --upgrade pip
 
         pip install git+https://github.com/hsorby/cmlibs.maths.git
+        pip list
+        echo "==============="
         pip install git+https://github.com/hsorby/cmlibs.utils.git
+        pip list
+        echo "==============="
         pip install git+https://github.com/hsorby/cmlibs.exporter.git
+        pip list
+        echo "==============="
 
         pip install -e .
 
