@@ -1,7 +1,7 @@
 import importlib.metadata
 
 for i in importlib.metadata.distributions():
-    print(i.metadata['Name'])
+    print(i.metadata['Name'], i._normalized_name)
 
 import cmlibs.maths
 import cmlibs.utils
