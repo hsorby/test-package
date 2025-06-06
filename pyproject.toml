@@ -1,0 +1,10 @@
+
+[project]
+name = "test-package-import"
+version = "0.1.0"
+description = "A test package for importing cmlibs libraries."
+requires-python = ">=3.9"
+
+[dependencies]
+cmlibs.maths = "*"
+cmlibs.utils = "*"
