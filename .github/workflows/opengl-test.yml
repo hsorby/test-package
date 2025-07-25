@@ -26,7 +26,7 @@ jobs:
 
     - name: Install OSMesa
       run: |        
-        sudo apt-get install libosmesa6-dev libopengl0 libglx-mesa0 libgl1-mesa-dev
+        sudo apt-get install libosmesa6-dev libopengl0 libglx-mesa0 libgl1-mesa-dev libglu1-mesa
 
     - name: Install dependencies
       run: |
