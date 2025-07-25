@@ -42,32 +42,32 @@ def draw_zinc_picture():
 
     s = r.getScene()
     t = {
-      "Graphics": [
-        {
-          "BoundaryMode": "ALL",
-          "CoordinateField": "coordinates",
-          "ElementFaceType": "ALL",
-          "FieldDomainType": "MESH2D",
-          "Material": "orange",
-          "RenderLineWidth": 1,
-          "RenderPointSize": 1,
-          "RenderPolygonMode": "SHADED",
-          "Scenecoordinatesystem": "LOCAL",
-          "SelectMode": "ON",
-          "SelectedMaterial": "default_selected",
-          "Surfaces": {},
-          "Tessellation": "default",
-          "Type": "SURFACES",
-          "VisibilityFlag": True
-        }
-      ],
-      "VisibilityFlag": True
+        "Graphics": [
+            {
+                "BoundaryMode": "ALL",
+                "CoordinateField": "coordinates",
+                "ElementFaceType": "ALL",
+                "FieldDomainType": "MESH2D",
+                "Material": "orange",
+                "RenderLineWidth": 1,
+                "RenderPointSize": 1,
+                "RenderPolygonMode": "SHADED",
+                "Scenecoordinatesystem": "LOCAL",
+                "SelectMode": "ON",
+                "SelectedMaterial": "default_selected",
+                "Surfaces": {},
+                "Tessellation": "default",
+                "Type": "SURFACES",
+                "VisibilityFlag": True
+            }
+        ],
+        "VisibilityFlag": True
     }
     r = s.readDescription(json.dumps(t), True)
 
     scene_viewer = c.getSceneviewermodule()
     sceneviewer = scene_viewer.createSceneviewer(Sceneviewer.BUFFERING_MODE_DOUBLE,
-                                                      Sceneviewer.STEREO_MODE_DEFAULT)
+                                                 Sceneviewer.STEREO_MODE_DEFAULT)
     sceneviewer.setViewportSize(width, height)
 
     # sceneviewer.readDescription(json.dumps(scene_description))
@@ -77,7 +77,46 @@ def draw_zinc_picture():
 
     sceneviewer.setScene(s)
 
-    sceneviewer.writeImageToFile('osmesa_output.png', False, width, height, 4, 0)
+    sv = {
+        "AntialiasSampling": 0,
+        "BackgroundColourRGB": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "EyePosition": [
+            -2.740519738838613,
+            1.0412032904203423,
+            2.5500414917958008
+        ],
+        "FarClippingPlane": 7.88551982890656,
+        "LightingLocalViewer": False,
+        "LightingTwoSided": True,
+        "LookatPosition": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "NearClippingPlane": 0.1942759914453282,
+        "PerturbLinesFlag": False,
+        "ProjectionMode": "PERSPECTIVE",
+        "Scene": None,
+        "Scenefilter": "default",
+        "TranslationRate": 1,
+        "TransparencyLayers": 1,
+        "TransparencyMode": "FAST",
+        "TumbleRate": 1.5,
+        "UpVector": [
+            0.2542897680821095,
+            0.9598259398928073,
+            -0.11862073578279508
+        ],
+        "ViewAngle": 0.6981317007977255,
+        "ZoomRate": 1
+    }
+    sceneviewer.readDescription(json.dumps(sv))
+
+    sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
 
     print(r)
     # Clean up
