@@ -15,4 +15,5 @@ opengl = [
     "PyOpenGL_accelerate",
     "Pillow",
     "numpy",
+    "cmlibs.zinc",
 ]
