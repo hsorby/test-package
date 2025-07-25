@@ -8,3 +8,11 @@ requires-python = ">=3.9"
 [dependencies]
 cmlibs.maths = "*"
 cmlibs.utils = "*"
+
+[project.optional-dependencies]
+opengl = [
+    "PyOpenGL",
+    "PyOpenGL_accelerate",
+    "Pillow",
+    "numpy",
+]
