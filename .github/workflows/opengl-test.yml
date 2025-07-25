@@ -36,3 +36,10 @@ jobs:
     - name: Run tests
       run: |
         python src/opengl_pic.py
+
+    - name: Upload image artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: rendered-image
+        path: osmesa_output.png
+
