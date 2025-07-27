@@ -31,13 +31,24 @@ def draw_zinc_picture_offscreen_mesa():
     width, height = 3260, 2048
     buffer = (ctypes.c_ubyte * (width * height * 4))()
 
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
     # Make the context current
     result = osmesa.OSMesaMakeCurrent(ctx, buffer, GL_UNSIGNED_BYTE, width, height)
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
 
+    glViewport(0, 0, width, height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    # gluPerspective(45.0, width / float(height), 0.1, 100.0)
+
     r = _do_zinc_drawing(height, width)
     print(r)
+
+    glFlush()
+    glFinish()
     # Clean up
     osmesa.OSMesaDestroyContext(ctx)
 
