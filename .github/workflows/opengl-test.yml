@@ -42,4 +42,3 @@ jobs:
       with:
         name: rendered-image
         path: osmesa_output.jpeg
-

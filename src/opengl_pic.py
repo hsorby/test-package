@@ -8,7 +8,7 @@ from cmlibs.zinc.context import Context
 from cmlibs.zinc.sceneviewer import Sceneviewer
 
 
-def draw_zinc_picture():
+def draw_zinc_picture_offscreen_mesa():
     osmesa = ctypes.CDLL("libOSMesa.so")
 
     # Define constants
@@ -36,10 +36,35 @@ def draw_zinc_picture():
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
 
+    r = _do_zinc_drawing(height, width)
+    print(r)
+    # Clean up
+    osmesa.OSMesaDestroyContext(ctx)
+
+
+def draw_zinc_picture_offscreen_pyside6():
+    from PySide6 import QtGui
+
+    if QtGui.QGuiApplication.instance() is None:
+        QtGui.QGuiApplication([])
+
+    off_screen = QtGui.QOffscreenSurface()
+    off_screen.create()
+    if off_screen.isValid():
+        context = QtGui.QOpenGLContext()
+        if context.create():
+            context.makeCurrent(off_screen)
+
+            r = _do_zinc_drawing(2048, 3260)
+            print(r)
+
+
+def _do_zinc_drawing(height, width):
     c = Context('pic')
+    material_module = c.getMaterialmodule()
+    material_module.defineStandardMaterials()
     r = c.getDefaultRegion()
     r.readFile('sphere.exf')
-
     s = r.getScene()
     t = {
         "Graphics": [
@@ -64,19 +89,15 @@ def draw_zinc_picture():
         "VisibilityFlag": True
     }
     r = s.readDescription(json.dumps(t), True)
-
     scene_viewer = c.getSceneviewermodule()
     sceneviewer = scene_viewer.createSceneviewer(Sceneviewer.BUFFERING_MODE_DOUBLE,
                                                  Sceneviewer.STEREO_MODE_DEFAULT)
     sceneviewer.setViewportSize(width, height)
-
     # sceneviewer.readDescription(json.dumps(scene_description))
     # Workaround for order independent transparency producing a white output
     # and in any case, sceneviewer transparency layers were not being serialised by Zinc.
     sceneviewer.setTransparencyMode(Sceneviewer.TRANSPARENCY_MODE_SLOW)
-
     sceneviewer.setScene(s)
-
     sv = {
         "AntialiasSampling": 0,
         "BackgroundColourRGB": [
@@ -115,12 +136,8 @@ def draw_zinc_picture():
         "ZoomRate": 1
     }
     sceneviewer.readDescription(json.dumps(sv))
-
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
-
-    print(r)
-    # Clean up
-    osmesa.OSMesaDestroyContext(ctx)
+    return r
 
 
 def main():
@@ -182,5 +199,6 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    draw_zinc_picture()
+    draw_zinc_picture_offscreen_mesa()
+    # draw_zinc_picture_offscreen_pyside6()
     print("Rendered image saved as osmesa_output.png")
