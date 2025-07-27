@@ -39,16 +39,21 @@ def draw_zinc_picture_offscreen_mesa():
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
 
-    glViewport(0, 0, width, height)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
+    # glViewport(0, 0, width, height)
+    # glMatrixMode(GL_PROJECTION)
+    # glLoadIdentity()
     # gluPerspective(45.0, width / float(height), 0.1, 100.0)
 
     r = _do_zinc_drawing(height, width)
+    image = np.frombuffer(buffer, dtype=np.uint8).reshape((height, width, 4))
+
+    # Flip vertically and save as PNG
+    image = np.flipud(image)
+    Image.fromarray(image, 'RGBA').save("osmesa_output.png")
     print(r)
 
-    glFlush()
-    glFinish()
+    # glFlush()
+    # glFinish()
     # Clean up
     osmesa.OSMesaDestroyContext(ctx)
 
