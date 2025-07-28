@@ -3,6 +3,9 @@ import json
 
 import numpy as np
 import OpenGL
+from OpenGL import arrays
+from OpenGL.raw.osmesa.mesa import OSMESA_WIDTH, OSMESA_HEIGHT
+
 OpenGL.USE_ACCELERATE = False
 
 from OpenGL.GL import *
@@ -36,13 +39,18 @@ def draw_zinc_picture_offscreen_mesa():
     buffer = arrays.GLubyteArray.zeros((height, width, 4))
     # buffer = (ctypes.c_ubyte * (width * height * 4))()
 
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
-
     # Make the context current
     result = osmesa.OSMesaMakeCurrent(ctx, buffer, GL_UNSIGNED_BYTE, width, height)
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
+
+    assert(osmesa.OSMesaGetCurrentContext())
+
+    print("Width=%d Height=%d" % (osmesa.OSMesaGetIntegerv(OSMESA_WIDTH),
+                                  osmesa.OSMesaGetIntegerv(OSMESA_HEIGHT)))
+    # Set up the OpenGL viewport and clear color
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
 
     _do_opengl_drawing(height, width)
     # r = _do_zinc_drawing(height, width)
