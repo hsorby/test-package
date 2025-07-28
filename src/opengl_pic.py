@@ -248,6 +248,6 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    # draw_zinc_picture_offscreen_mesa()
-    draw_zinc_picture_offscreen_pyside6()
+    draw_zinc_picture_offscreen_mesa()
+    # draw_zinc_picture_offscreen_pyside6()
     print("Rendered image saved as osmesa_output.png")
