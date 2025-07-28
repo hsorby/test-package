@@ -5,7 +5,6 @@ import numpy as np
 import OpenGL
 from OpenGL import arrays
 from OpenGL.raw.osmesa.mesa import OSMESA_WIDTH, OSMESA_HEIGHT
-
 OpenGL.USE_ACCELERATE = False
 
 from OpenGL.GL import *
