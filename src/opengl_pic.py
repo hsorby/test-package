@@ -3,6 +3,7 @@ import json
 
 import numpy as np
 from OpenGL.GL import *
+from OpenGL.GLU import *
 from PIL import Image
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.sceneviewer import Sceneviewer
@@ -42,7 +43,9 @@ def draw_zinc_picture_offscreen_mesa():
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    # gluPerspective(45.0, width / float(height), 0.1, 100.0)
+    glClearColor(0.2, 0.4, 0.6, 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    gluPerspective(45.0, width / float(height), 0.1, 100.0)
 
     r = _do_zinc_drawing(height, width)
     image = np.frombuffer(buffer, dtype=np.uint8).reshape((height, width, 4))
