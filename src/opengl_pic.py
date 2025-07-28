@@ -45,17 +45,27 @@ def draw_zinc_picture_offscreen_mesa():
     glLoadIdentity()
     glClearColor(0.2, 0.4, 0.6, 1.0)
     glClear(GL_COLOR_BUFFER_BIT)
-    gluPerspective(45.0, width / float(height), 0.1, 100.0)
+    # gluPerspective(45.0, width / float(height), 0.1, 100.0)
 
-    r = _do_zinc_drawing(height, width)
+    # Draw a simple triangle
+    glBegin(GL_TRIANGLES)
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex2f(-0.6, -0.4)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex2f(0.6, -0.4)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex2f(0.0, 0.6)
+    glEnd()
+
+    glFlush()
+    # r = _do_zinc_drawing(height, width)
     image = np.frombuffer(buffer, dtype=np.uint8).reshape((height, width, 4))
 
     # Flip vertically and save as PNG
     image = np.flipud(image)
     Image.fromarray(image, 'RGBA').save("osmesa_output.png")
-    print(r)
+    # print(r)
 
-    glFlush()
     glFinish()
     # Clean up
     osmesa.OSMesaDestroyContext(ctx)
