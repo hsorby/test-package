@@ -2,6 +2,9 @@ import ctypes
 import json
 
 import numpy as np
+import OpenGL
+OpenGL.USE_ACCELERATE = False
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from PIL import Image
@@ -30,7 +33,8 @@ def draw_zinc_picture_offscreen_mesa():
     ctx = osmesa.OSMesaCreateContext(OSMESA_RGBA, None)
 
     width, height = 3260, 2048
-    buffer = (ctypes.c_ubyte * (width * height * 4))()
+    buffer = arrays.GLubyteArray.zeros((height, width, 4))
+    # buffer = (ctypes.c_ubyte * (width * height * 4))()
 
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
@@ -40,24 +44,7 @@ def draw_zinc_picture_offscreen_mesa():
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
 
-    glViewport(0, 0, width, height)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glClearColor(0.2, 0.4, 0.6, 1.0)
-    glClear(GL_COLOR_BUFFER_BIT)
-    # gluPerspective(45.0, width / float(height), 0.1, 100.0)
-
-    # Draw a simple triangle
-    glBegin(GL_TRIANGLES)
-    glColor3f(1.0, 0.0, 0.0)
-    glVertex2f(-0.6, -0.4)
-    glColor3f(0.0, 1.0, 0.0)
-    glVertex2f(0.6, -0.4)
-    glColor3f(0.0, 0.0, 1.0)
-    glVertex2f(0.0, 0.6)
-    glEnd()
-
-    glFlush()
+    _do_opengl_drawing(height, width)
     # r = _do_zinc_drawing(height, width)
     image = np.frombuffer(buffer, dtype=np.uint8).reshape((height, width, 4))
 
@@ -69,6 +56,25 @@ def draw_zinc_picture_offscreen_mesa():
     glFinish()
     # Clean up
     osmesa.OSMesaDestroyContext(ctx)
+
+
+def _do_opengl_drawing(height, width):
+    glViewport(0, 0, width, height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glClearColor(0.2, 0.4, 0.6, 1.0)
+    glClear(GL_COLOR_BUFFER_BIT)
+    # gluPerspective(45.0, width / float(height), 0.1, 100.0)
+    # Draw a simple triangle
+    glBegin(GL_TRIANGLES)
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex2f(-0.6, -0.4)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex2f(0.6, -0.4)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex2f(0.0, 0.6)
+    glEnd()
+    glFlush()
 
 
 def draw_zinc_picture_offscreen_pyside6():
@@ -84,8 +90,14 @@ def draw_zinc_picture_offscreen_pyside6():
         if context.create():
             context.makeCurrent(off_screen)
 
-            r = _do_zinc_drawing(2048, 3260)
-            print(r)
+            # r = _do_zinc_drawing(2048, 3260)
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 1, 0)
+
+            status = glCheckFramebufferStatus(GL_FRAMEBUFFER)
+            if status != GL_FRAMEBUFFER_COMPLETE:
+                print("Framebuffer is not complete:", status)
+
+            _do_opengl_drawing(2048, 3260)
 
 
 def _do_zinc_drawing(height, width):
@@ -228,6 +240,6 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    draw_zinc_picture_offscreen_mesa()
-    # draw_zinc_picture_offscreen_pyside6()
+    # draw_zinc_picture_offscreen_mesa()
+    draw_zinc_picture_offscreen_pyside6()
     print("Rendered image saved as osmesa_output.png")
