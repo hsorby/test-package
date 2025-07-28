@@ -63,7 +63,7 @@ def draw_zinc_picture_offscreen_mesa():
 
     # Flip vertically and save as PNG
     image = np.flipud(image)
-    Image.fromarray(image, 'RGBA').save("osmesa_output.png")
+    Image.fromarray(image, 'RGBA').save("osmesa_output.jpeg")
     # print(r)
 
     glFinish()
