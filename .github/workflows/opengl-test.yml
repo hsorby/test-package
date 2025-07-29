@@ -38,8 +38,8 @@ jobs:
       #  PYOPENGL_PLATFORM: osmesa
       #  LIBGL_ALWAYS_SOFTWARE: 1
       run: |
-        python src/opengl_pic.py
         python src/osmesa.py
+        python src/opengl_pic.py
 
     - name: Upload image artifact I
       uses: actions/upload-artifact@v4
