@@ -48,10 +48,11 @@ def draw_zinc_picture_offscreen_mesa():
     print("Width=%d Height=%d" % (osmesa.OSMesaGetIntegerv(OSMESA_WIDTH),
                                   osmesa.OSMesaGetIntegerv(OSMESA_HEIGHT)))
     # Set up the OpenGL viewport and clear color
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
+    glClearColor(0, 0, 255, 0)
+    # glMatrixMode(GL_MODELVIEW)
+    # glLoadIdentity()
 
-    _do_opengl_drawing(height, width)
+    # _do_opengl_drawing(height, width)
     # r = _do_zinc_drawing(height, width)
     image = np.frombuffer(buffer, dtype=np.uint8).reshape((height, width, 4))
 
