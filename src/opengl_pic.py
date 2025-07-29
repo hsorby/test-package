@@ -2,11 +2,11 @@ import json
 import os
 
 import numpy as np
+
 if not os.environ.get('PYOPENGL_PLATFORM'):
     os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 
 import OpenGL
-
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -19,7 +19,8 @@ from cmlibs.zinc.sceneviewer import Sceneviewer
 
 
 def write_image(buffer, filename):
-    image = np.frombuffer(buffer, dtype=np.uint8).reshape((OSMesaGetIntegerv(OSMESA_HEIGHT), OSMesaGetIntegerv(OSMESA_WIDTH), 4))
+    image = np.frombuffer(buffer, dtype=np.uint8).reshape(
+        (OSMesaGetIntegerv(OSMESA_HEIGHT), OSMesaGetIntegerv(OSMESA_WIDTH), 4))
 
     # Flip vertically and save as PNG
     image = np.flipud(image)
@@ -97,7 +98,7 @@ def draw_zinc_picture_offscreen_mesa():
     if not result:
         raise RuntimeError("OSMesaMakeCurrent failed")
 
-    assert(osmesa.OSMesaGetCurrentContext())
+    assert (osmesa.OSMesaGetCurrentContext())
 
     print("Width=%d Height=%d" % (osmesa.OSMesaGetIntegerv(OSMESA_WIDTH),
                                   osmesa.OSMesaGetIntegerv(OSMESA_HEIGHT)))
@@ -210,11 +211,11 @@ def _do_zinc_drawing(height, width):
             1.0
         ],
         "EyePosition": [
-            -2.740519738838613,
-            1.0412032904203423,
-            2.5500414917958008
+            -3.6098355377165454,
+            1.37148168884913,
+            3.358935996438843
         ],
-        "FarClippingPlane": 7.88551982890656,
+        "FarClippingPlane": 9.118039239824375,
         "LightingLocalViewer": False,
         "LightingTwoSided": True,
         "LookatPosition": [
@@ -222,7 +223,7 @@ def _do_zinc_drawing(height, width):
             0.0,
             0.0
         ],
-        "NearClippingPlane": 0.1942759914453282,
+        "NearClippingPlane": 1.4267954023631337,
         "PerturbLinesFlag": False,
         "ProjectionMode": "PERSPECTIVE",
         "Scene": None,
@@ -232,14 +233,14 @@ def _do_zinc_drawing(height, width):
         "TransparencyMode": "FAST",
         "TumbleRate": 1.5,
         "UpVector": [
-            0.2542897680821095,
-            0.9598259398928073,
-            -0.11862073578279508
+            0.2542897680821075,
+            0.9598259398927999,
+            -0.11862073578279417
         ],
-        "ViewAngle": 0.6981317007977255,
+        "ViewAngle": 0.6981317007977244,
         "ZoomRate": 1
     }
-    # sceneviewer.readDescription(json.dumps(sv))
+    sceneviewer.readDescription(json.dumps(sv))
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
     return r
 
