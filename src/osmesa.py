@@ -172,7 +172,7 @@ def render_image_basic():
 
 
 if __name__ == '__main__':
-    width, height = 400, 400
+    width, height = 3260, 2048
 
     ctx, buf = init_ctx(width, height)
     render_image()
