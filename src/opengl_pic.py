@@ -9,7 +9,9 @@ OpenGL.USE_ACCELERATE = False
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
+
 from PIL import Image
+
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.sceneviewer import Sceneviewer
 

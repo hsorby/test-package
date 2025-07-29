@@ -35,7 +35,7 @@ jobs:
 
     - name: Run tests
       env:
-        PYOPENGL_PLATFORM: osmesa
+      #  PYOPENGL_PLATFORM: osmesa
         LIBGL_ALWAYS_SOFTWARE: 1
       run: |
         python src/opengl_pic.py
