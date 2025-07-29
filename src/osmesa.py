@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-from __future__ import print_function
 import os
 
 if not os.environ.get('PYOPENGL_PLATFORM'):

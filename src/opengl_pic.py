@@ -1,19 +1,71 @@
-import ctypes
 import json
+import os
 
 import numpy as np
+if not os.environ.get('PYOPENGL_PLATFORM'):
+    os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
+
 import OpenGL
-from OpenGL import arrays
-from OpenGL.raw.osmesa.mesa import OSMESA_WIDTH, OSMESA_HEIGHT
-OpenGL.USE_ACCELERATE = False
+
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from OpenGL.osmesa import *
 
 from PIL import Image
 
 from cmlibs.zinc.context import Context
 from cmlibs.zinc.sceneviewer import Sceneviewer
+
+
+def write_image(buffer, filename):
+    image = np.frombuffer(buffer, dtype=np.uint8).reshape((OSMesaGetIntegerv(OSMESA_HEIGHT), OSMesaGetIntegerv(OSMESA_WIDTH), 4))
+
+    # Flip vertically and save as PNG
+    image = np.flipud(image)
+    Image.fromarray(image, 'RGBA').convert("RGB").save(filename)
+
+
+def write_ppm(buf, filename):
+    f = open(filename, "w")
+    if f:
+        h, w, c = buf.shape
+        print("P3", file=f)
+        print("# ascii ppm file created by osmesa", file=f)
+        print("%i %i" % (w, h), file=f)
+        print("255", file=f)
+        for y in range(h - 1, -1, -1):
+            for x in range(w):
+                pixel = buf[y, x]
+                l = " %3d %3d %3d" % (pixel[0], pixel[1], pixel[2])
+                f.write(l)
+            f.write("\n")
+
+
+def init_ctx(width, height):
+    OpenGL.USE_ACCELERATE = False
+    from OpenGL import arrays
+
+    ctx = OSMesaCreateContext(OSMESA_RGBA, None)
+    # ctx = OSMesaCreateContextExt(OSMESA_RGBA, 32, 0, 0, None)
+    buf = arrays.GLubyteArray.zeros((height, width, 4))
+    assert (OSMesaMakeCurrent(ctx, buf, GL_UNSIGNED_BYTE, width, height))
+    assert (OSMesaGetCurrentContext())
+
+    z = glGetIntegerv(GL_DEPTH_BITS)
+    s = glGetIntegerv(GL_STENCIL_BITS)
+    a = glGetIntegerv(GL_ACCUM_RED_BITS)
+    print("Depth=%d Stencil=%d Accum=%d" % (z, s, a))
+
+    print("Width=%d Height=%d" % (OSMesaGetIntegerv(OSMESA_WIDTH),
+                                  OSMesaGetIntegerv(OSMESA_HEIGHT)))
+    return ctx, buf
+
+
+def free_ctx(ctx, buf):
+    write_ppm(buf, 'osmesa_output.ppm')
+    write_image(buf, 'osmesa_output.jpeg')
+    OSMesaDestroyContext(ctx)
 
 
 def draw_zinc_picture_offscreen_mesa():
@@ -250,6 +302,9 @@ def main():
 
 if __name__ == "__main__":
     # main()
-    draw_zinc_picture_offscreen_mesa()
+    ctx, buf = init_ctx(3260, 2048)
+    _do_zinc_drawing(2048, 3260)
+    free_ctx(ctx, buf)
+    # draw_zinc_picture_offscreen_mesa()
     # draw_zinc_picture_offscreen_pyside6()
-    print("Rendered image saved as osmesa_output.png")
+    print("Rendered image saved as osmesa_output.jpeg")
