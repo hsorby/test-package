@@ -137,6 +137,7 @@ def _do_opengl_drawing(height, width):
     glVertex2f(0.0, 0.6)
     glEnd()
     glFlush()
+    glFinish()
 
 
 def draw_zinc_picture_offscreen_pyside6():
