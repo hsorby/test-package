@@ -153,7 +153,7 @@ def free_ctx(ctx, buf):
     OSMesaDestroyContext(ctx)
 
 
-def render_image():
+def render_image_basic():
     glClearColor(255, 0, 0, 0)
     glShadeModel(GL_FLAT)
 
@@ -172,7 +172,7 @@ def render_image():
 
 
 if __name__ == '__main__':
-    width, height = 400, 400
+    width, height = 800, 800
 
     ctx, buf = init_ctx(width, height)
     render_image()

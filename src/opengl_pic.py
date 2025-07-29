@@ -35,8 +35,8 @@ def draw_zinc_picture_offscreen_mesa():
     ctx = osmesa.OSMesaCreateContext(OSMESA_RGBA, None)
 
     width, height = 3260, 2048
-    buffer = arrays.GLubyteArray.zeros((height, width, 4))
-    # buffer = (ctypes.c_ubyte * (width * height * 4))()
+    # buffer = arrays.GLubyteArray.zeros((height, width, 4))
+    buffer = (ctypes.c_ubyte * (width * height * 4))()
 
     # Make the context current
     result = osmesa.OSMesaMakeCurrent(ctx, buffer, GL_UNSIGNED_BYTE, width, height)
