@@ -239,7 +239,7 @@ def _do_zinc_drawing(height, width):
         "ViewAngle": 0.6981317007977255,
         "ZoomRate": 1
     }
-    sceneviewer.readDescription(json.dumps(sv))
+    # sceneviewer.readDescription(json.dumps(sv))
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
     return r
 
@@ -304,7 +304,7 @@ def main():
 if __name__ == "__main__":
     # main()
     ctx, buf = init_ctx(3260, 2048)
-    _do_opengl_drawing(2048, 3260)
+    _do_zinc_drawing(2048, 3260)
     free_ctx(ctx, buf)
     # draw_zinc_picture_offscreen_mesa()
     # draw_zinc_picture_offscreen_pyside6()
