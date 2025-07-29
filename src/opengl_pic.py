@@ -303,7 +303,7 @@ def main():
 if __name__ == "__main__":
     # main()
     ctx, buf = init_ctx(3260, 2048)
-    _do_zinc_drawing(2048, 3260)
+    _do_opengl_drawing(2048, 3260)
     free_ctx(ctx, buf)
     # draw_zinc_picture_offscreen_mesa()
     # draw_zinc_picture_offscreen_pyside6()
