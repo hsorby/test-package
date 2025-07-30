@@ -169,14 +169,15 @@ def _do_zinc_drawing(height, width):
     print("Current directory:", here)
     print("Zinc drawing with height:", height, "width:", width)
     c = Context('pic')
-    print("Zinc context created:", c)
+    print("Zinc context created:", c.isValid())
     material_module = c.getMaterialmodule()
-    print("Zinc material module:", material_module)
+    print("Zinc material module:", material_module.isValid())
     material_module.defineStandardMaterials()
     print("Defined standard materials in Zinc material module.")
     r = c.getDefaultRegion()
     print("Zinc default region:", r.isValid())
     set_true_for_segfault = False
+    print(os.path.join(here, 'sphere.exf'))
     res = r.readFile(os.path.join(here, 'sphere.exf')) if set_true_for_segfault else 0
     print("Read file result:", res)
     s = r.getScene()
