@@ -195,7 +195,7 @@ def _do_zinc_drawing(height, width):
     print("OpenGL Version:", GL.glGetString(GL.GL_VERSION))
     print("GLSL Version:", GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION))
     print("Vendor:", GL.glGetString(GL.GL_VENDOR))
-    print("Renderer:", GL.glGetString(GL.GL_RENDERER))
+    print("Renderer:", GL.glGetString(GL.GL_RENDERER), flush=True)
 
     sceneviewer.renderScene()
     # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
