@@ -6,8 +6,10 @@ import numpy as np
 # if not os.environ.get('PYOPENGL_PLATFORM'):
 #     os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 
-# import OpenGL
+import OpenGL
+OpenGL.USE_ACCELERATE = False
 
+from OpenGL import arrays
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.osmesa import *
@@ -44,9 +46,6 @@ def write_ppm(buf, filename):
 
 
 def init_ctx(width, height):
-    OpenGL.USE_ACCELERATE = False
-    from OpenGL import arrays
-
     ctx = OSMesaCreateContext(OSMESA_RGBA, None)
     # ctx = OSMesaCreateContextExt(OSMESA_RGBA, 32, 0, 0, None)
     buf = arrays.GLubyteArray.zeros((height, width, 4))
