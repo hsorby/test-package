@@ -165,6 +165,8 @@ def draw_zinc_picture_offscreen_pyside6():
 
 
 def _do_zinc_drawing(height, width):
+    here = os.path.dirname(os.path.abspath(__file__))
+    print("Current directory:", here)
     print("Zinc drawing with height:", height, "width:", width)
     c = Context('pic')
     print("Zinc context created:", c)
@@ -174,8 +176,8 @@ def _do_zinc_drawing(height, width):
     print("Defined standard materials in Zinc material module.")
     r = c.getDefaultRegion()
     print("Zinc default region:", r)
-    # res = r.readFile('src/sphere.exf')
-    res = 0
+    res = r.readFile(os.path.join(here, 'sphere.exf'))
+    # res = 0
     print("Read file result:", res)
     s = r.getScene()
     t = {
@@ -313,9 +315,13 @@ def main():
 
 if __name__ == "__main__":
     # main()
+    print("Starting offscreen rendering with OSMesa...")
     ctx, buf = init_ctx(3260, 2048)
+    print("Initialized OSMesa context and buffer.")
     _do_zinc_drawing(2048, 3260)
+    print("Zinc drawing completed.")
     free_ctx(ctx, buf)
+    print("Freed OSMesa context and buffer.")
     # draw_zinc_picture_offscreen_mesa()
     # draw_zinc_picture_offscreen_pyside6()
     print("Rendered image saved as osmesa_output.jpeg")
