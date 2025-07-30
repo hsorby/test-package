@@ -169,7 +169,7 @@ def _do_zinc_drawing(height, width):
     material_module = c.getMaterialmodule()
     material_module.defineStandardMaterials()
     r = c.getDefaultRegion()
-    res = r.readFile('sphere.exf')
+    res = r.readFile('src/sphere.exf')
     print("Read file result:", res)
     s = r.getScene()
     t = {
