@@ -60,6 +60,7 @@ def init_ctx(width, height):
         0
     ])
     ctx = OSMesaCreateContextAttribs(attrs, None)
+    print("ctx:", ctx)
     # ctx = OSMesaCreateContextExt(OSMESA_RGBA, 32, 0, 0, None)
     buf = arrays.GLubyteArray.zeros((width, height, 4))
     assert (OSMesaMakeCurrent(ctx, buf, GL.GL_UNSIGNED_BYTE, width, height))
