@@ -192,6 +192,11 @@ def _do_zinc_drawing(height, width):
     res = sceneviewer.readDescription(json.dumps(sv))
     print("Sceneviewer read description result:", res, flush=True)
     sceneviewer.setRenderTimeout(-1.0)
+    print("OpenGL Version:", GL.glGetString(GL.GL_VERSION))
+    print("GLSL Version:", GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION))
+    print("Vendor:", GL.glGetString(GL.GL_VENDOR))
+    print("Renderer:", GL.glGetString(GL.GL_RENDERER))
+
     sceneviewer.renderScene()
     # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
     return r
