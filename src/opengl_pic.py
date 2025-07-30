@@ -169,7 +169,8 @@ def _do_zinc_drawing(height, width):
     material_module = c.getMaterialmodule()
     material_module.defineStandardMaterials()
     r = c.getDefaultRegion()
-    r.readFile('sphere.exf')
+    res = r.readFile('sphere.exf')
+    print("Read file result:", res)
     s = r.getScene()
     t = {
         "Graphics": [
@@ -194,6 +195,7 @@ def _do_zinc_drawing(height, width):
         "VisibilityFlag": True
     }
     res = s.readDescription(json.dumps(t), True)
+    print("Read description result:", res)
     scene_viewer = c.getSceneviewermodule()
     sceneviewer = scene_viewer.createSceneviewer(Sceneviewer.BUFFERING_MODE_DOUBLE,
                                                  Sceneviewer.STEREO_MODE_DEFAULT)
@@ -205,9 +207,9 @@ def _do_zinc_drawing(height, width):
     sv = {
         "AntialiasSampling": 0,
         "BackgroundColourRGB": [
-            1.0,
-            1.0,
-            1.0
+            0.2,
+            0.4,
+            0.6
         ],
         "EyePosition": [
             -3.6098355377165454,
@@ -239,7 +241,8 @@ def _do_zinc_drawing(height, width):
         "ViewAngle": 0.6981317007977244,
         "ZoomRate": 1
     }
-    sceneviewer.readDescription(json.dumps(sv))
+    res = sceneviewer.readDescription(json.dumps(sv))
+    print("Sceneviewer read description result:", res)
     sceneviewer.setScene(s)
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
     return r
