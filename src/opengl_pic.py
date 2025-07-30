@@ -174,7 +174,8 @@ def _do_zinc_drawing(height, width):
     print("Defined standard materials in Zinc material module.")
     r = c.getDefaultRegion()
     print("Zinc default region:", r)
-    res = r.readFile('src/sphere.exf')
+    # res = r.readFile('src/sphere.exf')
+    res = 0
     print("Read file result:", res)
     s = r.getScene()
     t = {
