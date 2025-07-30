@@ -34,8 +34,8 @@ jobs:
         pip install -e ".[opengl]"
 
     - name: Run tests
-      #env:
-      #  PYOPENGL_PLATFORM: osmesa
+      env:
+        PYOPENGL_PLATFORM: osmesa
       #  LIBGL_ALWAYS_SOFTWARE: 1
       run: |
         Xvfb :1 -screen 0 1024x768x24 &
