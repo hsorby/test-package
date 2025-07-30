@@ -6,8 +6,8 @@ import numpy as np
 # if not os.environ.get('PYOPENGL_PLATFORM'):
 #     os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 
-# import OpenGL
-# OpenGL.USE_ACCELERATE = False
+import OpenGL
+OpenGL.USE_ACCELERATE = False
 
 from OpenGL import arrays
 from OpenGL.GL import *
