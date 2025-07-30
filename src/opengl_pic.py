@@ -187,6 +187,8 @@ def _do_zinc_drawing(height, width):
 if __name__ == "__main__":
     # main()
     print("Starting offscreen rendering with OSMesa...")
+    print(os.environ.get('PYOPENGL_PLATFORM'))
+    print(os.environ.get('LIBGL_ALWAYS_SOFTWARE'))
     ctx, buf = init_ctx(3260, 2048)
     print("Initialized OSMesa context and buffer.")
     _do_zinc_drawing(2048, 3260)
