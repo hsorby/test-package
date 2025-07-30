@@ -193,7 +193,7 @@ def _do_zinc_drawing(height, width):
         ],
         "VisibilityFlag": True
     }
-    r = s.readDescription(json.dumps(t), True)
+    res = s.readDescription(json.dumps(t), True)
     scene_viewer = c.getSceneviewermodule()
     sceneviewer = scene_viewer.createSceneviewer(Sceneviewer.BUFFERING_MODE_DOUBLE,
                                                  Sceneviewer.STEREO_MODE_DEFAULT)
@@ -202,7 +202,6 @@ def _do_zinc_drawing(height, width):
     # Workaround for order independent transparency producing a white output
     # and in any case, sceneviewer transparency layers were not being serialised by Zinc.
     sceneviewer.setTransparencyMode(Sceneviewer.TRANSPARENCY_MODE_SLOW)
-    sceneviewer.setScene(s)
     sv = {
         "AntialiasSampling": 0,
         "BackgroundColourRGB": [
@@ -241,6 +240,7 @@ def _do_zinc_drawing(height, width):
         "ZoomRate": 1
     }
     sceneviewer.readDescription(json.dumps(sv))
+    sceneviewer.setScene(s)
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
     return r
 
