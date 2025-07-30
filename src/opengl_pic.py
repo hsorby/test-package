@@ -6,13 +6,18 @@ import numpy as np
 # if not os.environ.get('PYOPENGL_PLATFORM'):
 #     os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 
-import OpenGL
-OpenGL.USE_ACCELERATE = False
+# import OpenGL
+# OpenGL.USE_ACCELERATE = False
 
+from OpenGL import GL
 from OpenGL import arrays
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.osmesa import *
+from OpenGL.osmesa import (
+    OSMesaCreateContextAttribs, OSMesaMakeCurrent, OSMesaGetCurrentContext,
+    OSMESA_FORMAT, OSMESA_RGBA, OSMESA_PROFILE, OSMESA_COMPAT_PROFILE,
+    OSMESA_CONTEXT_MAJOR_VERSION, OSMESA_CONTEXT_MINOR_VERSION,
+    OSMESA_HEIGHT, OSMESA_WIDTH,
+    OSMESA_DEPTH_BITS, OSMesaGetIntegerv, OSMesaDestroyContext
+)
 
 from PIL import Image
 
@@ -46,15 +51,23 @@ def write_ppm(buf, filename):
 
 
 def init_ctx(width, height):
-    ctx = OSMesaCreateContext(OSMESA_RGBA, None)
+    attrs = arrays.GLintArray.asArray([
+        OSMESA_FORMAT, OSMESA_RGBA,
+        OSMESA_DEPTH_BITS, 24,
+        OSMESA_PROFILE, OSMESA_COMPAT_PROFILE,
+        OSMESA_CONTEXT_MAJOR_VERSION, 2,
+        OSMESA_CONTEXT_MINOR_VERSION, 1,
+        0
+    ])
+    ctx = OSMesaCreateContextAttribs(attrs, None)
     # ctx = OSMesaCreateContextExt(OSMESA_RGBA, 32, 0, 0, None)
-    buf = arrays.GLubyteArray.zeros((height, width, 4))
-    assert (OSMesaMakeCurrent(ctx, buf, GL_UNSIGNED_BYTE, width, height))
+    buf = arrays.GLubyteArray.zeros((width, height, 4))
+    assert (OSMesaMakeCurrent(ctx, buf, GL.GL_UNSIGNED_BYTE, width, height))
     assert (OSMesaGetCurrentContext())
 
-    z = glGetIntegerv(GL_DEPTH_BITS)
-    s = glGetIntegerv(GL_STENCIL_BITS)
-    a = glGetIntegerv(GL_ACCUM_RED_BITS)
+    z = GL.glGetIntegerv(GL.GL_DEPTH_BITS)
+    s = GL.glGetIntegerv(GL.GL_STENCIL_BITS)
+    a = GL.glGetIntegerv(GL.GL_ACCUM_RED_BITS)
     print("Depth=%d Stencil=%d Accum=%d" % (z, s, a))
 
     print("Width=%d Height=%d" % (OSMesaGetIntegerv(OSMESA_WIDTH),
@@ -63,29 +76,29 @@ def init_ctx(width, height):
 
 
 def free_ctx(ctx, buf):
-    glFinish()
+    GL.glFinish()
     write_ppm(buf, 'osmesa_output.ppm')
     write_image(buf, 'osmesa_output.jpeg')
     OSMesaDestroyContext(ctx)
 
 
 def _do_opengl_drawing(height, width):
-    glViewport(0, 0, width, height)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glClearColor(0.2, 0.4, 0.6, 1.0)
-    glClear(GL_COLOR_BUFFER_BIT)
+    GL.glViewport(0, 0, width, height)
+    GL.glMatrixMode(GL.GL_PROJECTION)
+    GL.glLoadIdentity()
+    GL.glClearColor(0.2, 0.4, 0.6, 1.0)
+    GL.glClear(GL.GL_COLOR_BUFFER_BIT)
     # gluPerspective(45.0, width / float(height), 0.1, 100.0)
     # Draw a simple triangle
-    glBegin(GL_TRIANGLES)
-    glColor3f(1.0, 0.0, 0.0)
-    glVertex2f(-0.6, -0.4)
-    glColor3f(0.0, 1.0, 0.0)
-    glVertex2f(0.6, -0.4)
-    glColor3f(0.0, 0.0, 1.0)
-    glVertex2f(0.0, 0.6)
-    glEnd()
-    glFlush()
+    GL.glBegin(GL.GL_TRIANGLES)
+    GL.glColor3f(1.0, 0.0, 0.0)
+    GL.glVertex2f(-0.6, -0.4)
+    GL.glColor3f(0.0, 1.0, 0.0)
+    GL.glVertex2f(0.6, -0.4)
+    GL.glColor3f(0.0, 0.0, 1.0)
+    GL.glVertex2f(0.0, 0.6)
+    GL.glEnd()
+    GL.glFlush()
 
 
 def _do_zinc_drawing(height, width):
@@ -189,10 +202,10 @@ if __name__ == "__main__":
     print("Starting offscreen rendering with OSMesa...")
     print(os.environ.get('PYOPENGL_PLATFORM'))
     print(os.environ.get('LIBGL_ALWAYS_SOFTWARE'))
-    ctx, buf = init_ctx(3260, 2048)
+    context, buffer = init_ctx(3260, 2048)
     print("Initialized OSMesa context and buffer.")
     _do_zinc_drawing(2048, 3260)
     print("Zinc drawing completed.")
-    free_ctx(ctx, buf)
+    free_ctx(context, buffer)
     print("Freed OSMesa context and buffer.")
     print("Rendered image saved as osmesa_output.jpeg")
