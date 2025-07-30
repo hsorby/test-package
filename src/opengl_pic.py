@@ -165,10 +165,15 @@ def draw_zinc_picture_offscreen_pyside6():
 
 
 def _do_zinc_drawing(height, width):
+    print("Zinc drawing with height:", height, "width:", width)
     c = Context('pic')
+    print("Zinc context created:", c)
     material_module = c.getMaterialmodule()
+    print("Zinc material module:", material_module)
     material_module.defineStandardMaterials()
+    print("Defined standard materials in Zinc material module.")
     r = c.getDefaultRegion()
+    print("Zinc default region:", r)
     res = r.readFile('src/sphere.exf')
     print("Read file result:", res)
     s = r.getScene()
