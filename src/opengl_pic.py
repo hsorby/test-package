@@ -167,6 +167,10 @@ def _do_zinc_drawing(height, width):
         "ViewAngle": 0.6981317007977244,
         "ZoomRate": 1
     }
+    set_true_for_segfault = True
+    print(os.path.join(here, 'sphere.exf'), os.path.isfile(os.path.join(here, 'sphere.exf')), os.path.getsize(os.path.join(here, 'sphere.exf')))
+    res = r.readFile(os.path.join(here, 'sphere.exf')) if set_true_for_segfault else 0
+    print("Read file result:", res)
     s = r.getScene()
     print("Zinc scene:", s.isValid())
     sceneviewer.setScene(s)
@@ -174,14 +178,6 @@ def _do_zinc_drawing(height, width):
     print("Read description result:", res)
     res = sceneviewer.readDescription(json.dumps(sv))
     print("Sceneviewer read description result:", res)
-    set_true_for_segfault = True
-    print(os.path.join(here, 'sphere.exf'), os.path.isfile(os.path.join(here, 'sphere.exf')), os.path.getsize(os.path.join(here, 'sphere.exf')))
-    res = r.readFile(os.path.join(here, 'sphere.exf')) if set_true_for_segfault else 0
-    print("Read file result:", res, flush=True)
-    res = sceneviewer.readDescription(json.dumps(sv))
-    print("Sceneviewer read description result:", res, flush=True)
-    res = s.readDescription(json.dumps(t), True)
-    print("Read description result:", res, flush=True)
     # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
     return r
 
