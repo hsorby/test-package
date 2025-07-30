@@ -175,7 +175,6 @@ def _do_zinc_drawing(height, width):
     print("Defined standard materials in Zinc material module.")
     r = c.getDefaultRegion()
     print("Zinc default region:", r.isValid())
-    s = r.getScene()
     t = {
         "Graphics": [
             {
@@ -243,6 +242,8 @@ def _do_zinc_drawing(height, width):
         "ViewAngle": 0.6981317007977244,
         "ZoomRate": 1
     }
+    s = r.getScene()
+    print("Zinc scene:", s.isValid())
     sceneviewer.setScene(s)
     res = s.readDescription(json.dumps(t), True)
     print("Read description result:", res)
