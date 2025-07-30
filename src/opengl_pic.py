@@ -25,8 +25,8 @@ from cmlibs.zinc.context import Context
 from cmlibs.zinc.sceneviewer import Sceneviewer
 
 
-def write_image(buffer, filename):
-    image = np.frombuffer(buffer, dtype=np.uint8).reshape(
+def write_image(buf, filename):
+    image = np.frombuffer(buf, dtype=np.uint8).reshape(
         (OSMesaGetIntegerv(OSMESA_HEIGHT), OSMesaGetIntegerv(OSMESA_WIDTH), 4))
 
     # Flip vertically and save as PNG
@@ -99,10 +99,7 @@ def _do_opengl_drawing(height, width):
     GL.glVertex2f(0.0, 0.6)
     GL.glEnd()
     GL.glFlush()
-    print("OpenGL Version:", GL.glGetString(GL.GL_VERSION))
-    print("GLSL Version:", GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION))
-    print("Vendor:", GL.glGetString(GL.GL_VENDOR))
-    print("Renderer:", GL.glGetString(GL.GL_RENDERER), flush=True)
+    _opengl_context_info()
 
 
 def _do_zinc_drawing(height, width):
@@ -196,14 +193,28 @@ def _do_zinc_drawing(height, width):
     res = sceneviewer.readDescription(json.dumps(sv))
     print("Sceneviewer read description result:", res, flush=True)
     sceneviewer.setRenderTimeout(-1.0)
+    _opengl_context_info()
+    sceneviewer.renderScene()
+    # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
+    return r
+
+
+def _opengl_context_info():
+    from OpenGL.GL.ARB import compatibility
+
+    profile_mask = GL.glGetIntegerv(GL.GL_CONTEXT_PROFILE_MASK)
+
+    if profile_mask & GL.GL_CONTEXT_CORE_PROFILE_BIT:
+        print("OpenGL Core Profile")
+    elif profile_mask & GL.GL_CONTEXT_COMPATIBILITY_PROFILE_BIT:
+        print("OpenGL Compatibility Profile")
+    else:
+        print("Unknown or no profile")
+
     print("OpenGL Version:", GL.glGetString(GL.GL_VERSION))
     print("GLSL Version:", GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION))
     print("Vendor:", GL.glGetString(GL.GL_VENDOR))
     print("Renderer:", GL.glGetString(GL.GL_RENDERER), flush=True)
-
-    sceneviewer.renderScene()
-    # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
-    return r
 
 
 if __name__ == "__main__":
@@ -213,8 +224,8 @@ if __name__ == "__main__":
     print(os.environ.get('LIBGL_ALWAYS_SOFTWARE'))
     context, buffer = init_ctx(3260, 2048)
     print("Initialized OSMesa context and buffer.")
-    # _do_zinc_drawing(2048, 3260)
-    _do_opengl_drawing(2048, 3260)
+    _do_zinc_drawing(2048, 3260)
+    # _do_opengl_drawing(2048, 3260)
     print("Zinc drawing completed.")
     free_ctx(context, buffer)
     print("Freed OSMesa context and buffer.")

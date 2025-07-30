@@ -37,9 +37,10 @@ jobs:
       env:
         PYOPENGL_PLATFORM: osmesa
         LIBGL_ALWAYS_SOFTWARE: 1
-      run: |
-        Xvfb :1 -screen 0 1024x768x24 &
-        export DISPLAY=:1
+      run: |        
+        glxinfo | grep "OpenGL version"
+        osmesainfo
+
         # python src/osmesa.py
         python src/opengl_pic.py
 
