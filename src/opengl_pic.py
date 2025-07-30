@@ -99,6 +99,10 @@ def _do_opengl_drawing(height, width):
     GL.glVertex2f(0.0, 0.6)
     GL.glEnd()
     GL.glFlush()
+    print("OpenGL Version:", GL.glGetString(GL.GL_VERSION))
+    print("GLSL Version:", GL.glGetString(GL.GL_SHADING_LANGUAGE_VERSION))
+    print("Vendor:", GL.glGetString(GL.GL_VENDOR))
+    print("Renderer:", GL.glGetString(GL.GL_RENDERER), flush=True)
 
 
 def _do_zinc_drawing(height, width):
@@ -209,7 +213,8 @@ if __name__ == "__main__":
     print(os.environ.get('LIBGL_ALWAYS_SOFTWARE'))
     context, buffer = init_ctx(3260, 2048)
     print("Initialized OSMesa context and buffer.")
-    _do_zinc_drawing(2048, 3260)
+    # _do_zinc_drawing(2048, 3260)
+    _do_opengl_drawing(2048, 3260)
     print("Zinc drawing completed.")
     free_ctx(context, buffer)
     print("Freed OSMesa context and buffer.")
