@@ -252,6 +252,10 @@ def _do_zinc_drawing(height, width):
     print(os.path.join(here, 'sphere.exf'), os.path.isfile(os.path.join(here, 'sphere.exf')), os.path.getsize(os.path.join(here, 'sphere.exf')))
     res = r.readFile(os.path.join(here, 'sphere.exf')) if set_true_for_segfault else 0
     print("Read file result:", res)
+    res = s.readDescription(json.dumps(t), True)
+    print("Read description result:", res)
+    res = sceneviewer.readDescription(json.dumps(sv))
+    print("Sceneviewer read description result:", res)
     sceneviewer.writeImageToFile('osmesa_output.jpeg', False, width, height, 4, 0)
     return r
 
