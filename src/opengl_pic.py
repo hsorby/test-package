@@ -257,7 +257,7 @@ def _do_zinc_drawing(height, width):
     print("Sceneviewer read description result:", res, flush=True)
     res = s.readDescription(json.dumps(t), True)
     print("Read description result:", res, flush=True)
-    sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
+    # sceneviewer.writeImageToFile('osmesa_output.jpeg', 0, width, height, 4, 0)
     return r
 
 
