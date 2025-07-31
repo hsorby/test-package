@@ -66,10 +66,10 @@ def init_ctx(width, height):
     assert (OSMesaMakeCurrent(ctx, buf, GL.GL_UNSIGNED_BYTE, width, height))
     assert (OSMesaGetCurrentContext())
 
-    z = GL.glGetIntegerv(GL.GL_DEPTH_BITS)
-    s = GL.glGetIntegerv(GL.GL_STENCIL_BITS)
-    a = GL.glGetIntegerv(GL.GL_ACCUM_RED_BITS)
-    print("Depth=%d Stencil=%d Accum=%d" % (z, s, a))
+    # z = GL.glGetIntegerv(GL.GL_DEPTH_BITS)
+    # s = GL.glGetIntegerv(GL.GL_STENCIL_BITS)
+    # a = GL.glGetIntegerv(GL.GL_ACCUM_RED_BITS)
+    # print("Depth=%d Stencil=%d Accum=%d" % (z, s, a))
 
     print("Width=%d Height=%d" % (OSMesaGetIntegerv(OSMESA_WIDTH),
                                   OSMesaGetIntegerv(OSMESA_HEIGHT)))
